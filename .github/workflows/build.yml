@@ -1,0 +1,28 @@
+name: Build Mod
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Build C# File
+      run: |
+        dotnet new classlib -n InfiniteStamina -o . --force
+        dotnet build --configuration Release
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: InfiniteStamina-DLL
+        path: bin/Release/**/InfiniteStamina.dll
